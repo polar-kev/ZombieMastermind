@@ -1,0 +1,150 @@
+fileFormatVersion: 2
+guid: 1632075a232fe4397844c66169bcefc6
+timeCreated: 1511503308
+licenseType: Free
+ModelImporter:
+  serializedVersion: 21
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: FieldSupport_Mesh
+    100004: Hero_Ankle_L
+    100006: Hero_Ankle_R
+    100008: Hero_Clavicle_L
+    100010: Hero_Clavicle_R
+    100012: Hero_Elbow_L
+    100014: Hero_Elbow_R
+    100016: Hero_Fingers_L
+    100018: Hero_Fingers_R
+    100020: Hero_Hip_L
+    100022: Hero_Hip_R
+    100024: Hero_Knee_L
+    100026: Hero_Knee_R
+    100028: Hero_Knuckles_L
+    100030: Hero_Knuckles_R
+    100032: Hero_Neck
+    100034: Hero_Pelvis
+    100036: Hero_Shoulder_L
+    100038: Hero_Shoulder_R
+    100040: Hero_Spine1
+    100042: Hero_Spine2
+    100044: Hero_Spine3
+    100046: Hero_Thumb_L
+    100048: Hero_Thumb_R
+    100050: Hero_Toes_L
+    100052: Hero_Toes_R
+    100054: Hero_weaponattach_R
+    100056: Hero_Wrist_L
+    100058: Hero_Wrist_R
+    100060: RIG
+    100062: Root
+    400000: //RootNode
+    400002: FieldSupport_Mesh
+    400004: Hero_Ankle_L
+    400006: Hero_Ankle_R
+    400008: Hero_Clavicle_L
+    400010: Hero_Clavicle_R
+    400012: Hero_Elbow_L
+    400014: Hero_Elbow_R
+    400016: Hero_Fingers_L
+    400018: Hero_Fingers_R
+    400020: Hero_Hip_L
+    400022: Hero_Hip_R
+    400024: Hero_Knee_L
+    400026: Hero_Knee_R
+    400028: Hero_Knuckles_L
+    400030: Hero_Knuckles_R
+    400032: Hero_Neck
+    400034: Hero_Pelvis
+    400036: Hero_Shoulder_L
+    400038: Hero_Shoulder_R
+    400040: Hero_Spine1
+    400042: Hero_Spine2
+    400044: Hero_Spine3
+    400046: Hero_Thumb_L
+    400048: Hero_Thumb_R
+    400050: Hero_Toes_L
+    400052: Hero_Toes_R
+    400054: Hero_weaponattach_R
+    400056: Hero_Wrist_L
+    400058: Hero_Wrist_R
+    400060: RIG
+    400062: Root
+    4300000: FieldSupport_Mesh
+    9500000: //RootNode
+    13700000: FieldSupport_Mesh
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: "Invalid Avatar Rig Configuration. Missing or invalid transform:\n\tRequired
+      human bone 'Head' not found\n"
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 3
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 1
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
