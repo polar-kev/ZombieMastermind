@@ -6,7 +6,7 @@ public class Pickup : MonoBehaviour {
 
 	private Transform inHand;
 
-	private float pickupDistance = 2f;
+	private float pickupDistance = 2.5f;
 	private Rigidbody rgbd;
 	private static bool isInHand;
 

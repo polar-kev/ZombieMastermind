@@ -6,14 +6,18 @@ using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour {
 	//public enum blockColour{red,blue,yellow,noColour};
-	public static int difficulty = 2;
+	public static int difficulty = 1;
 	public blockColour[] mysterySequence; 
 	public blockColour[] tempArray; 
 	public GameObject redBlock;
 	public GameObject blueBlock;
 	public GameObject yellowBlock;
 	public GameObject dropZone;
+	public Transform radioSpawn;
+	public Transform batterySpawn;
 	public Transform playerSpawn;
+	public Radio radio;
+	public Battery battery;
 
 
 	public static GameController instance;
@@ -35,7 +39,13 @@ public class GameController : MonoBehaviour {
 	private float gameBoardMaxX;
 	private float gameBoardMinZ;
 	private float gameBoardMaxZ;
+	private GameObject player;
+	public GameObject zombieGroup;
+	public Transform zombieSpawn;
+	public ZombieGroupController zombieGroupController;
 
+	public AudioClip bullseyeSound;
+	private AudioSource audioSource;
 
 
 	//Singleton pattern
@@ -49,6 +59,7 @@ public class GameController : MonoBehaviour {
 
 	// initialization
 	void Start () {
+		audioSource = gameObject.GetComponent<AudioSource> ();
 		initializeGame ();
 	}
 
@@ -65,8 +76,12 @@ public class GameController : MonoBehaviour {
 
 		//initialize game boundaries
 		ground = GameObject.FindGameObjectWithTag ("Ground").gameObject;
+
+		//resize gameboard where blocks will randomly be generated based on difficulty level
 		if(difficulty > 2){
-			ground.transform.localScale += new Vector3 (3f*(2f*difficulty-1f),0,0);
+			//ground.transform.localScale += new Vector3 (3f*(2f*difficulty-1f),0,0);
+			//One size fits all gameboard
+			//ground.transform.localScale = new Vector3 (3f*(2f*9),0,0);
 		}
 		float padding = 2f;
 		gameBoardMinX = ground.GetComponent<BoxCollider> ().bounds.min.x + padding;
@@ -74,7 +89,15 @@ public class GameController : MonoBehaviour {
 		gameBoardMinZ = ground.GetComponent<BoxCollider> ().bounds.min.z + padding;
 		gameBoardMaxZ = ground.GetComponent<BoxCollider> ().bounds.max.z - padding;
 
-		setPlayerPosition ();
+		//Initialize Pickups
+		radio.gameObject.transform.position = radioSpawn.transform.position;
+		battery.gameObject.transform.position = batterySpawn.transform.position;
+
+		//Initialize player
+		player = GameObject.FindGameObjectWithTag ("Player");
+		SetPlayerPosition ();
+		player.GetComponent<PlayerController> ().isAlive = true;
+		SetZombiePosition ();
 
 		//game starts with a mystery sequence that the player must guess
 		GenerateMysterySequence ();
@@ -92,10 +115,7 @@ public class GameController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(isGameWon){
-			StartCoroutine("nextLevel");
-			isGameWon = false;
-		}
+		
 	}
 
 	void SpawnDropZones(){
@@ -115,15 +135,16 @@ public class GameController : MonoBehaviour {
 			if(mysterySequence[i] == blockColour.yellow){yellows++;}
 		}
 		//print("reds: "+reds + ", blues: "+blues+", yellows: "+yellows);
+		float blockSpawnHeight = 3f;
 
 		for (int j = 0; j < Random.Range (1 + reds, (reds * 2)+1); j++) {
-			Instantiate (redBlock, new Vector3(Random.Range(gameBoardMinX,gameBoardMaxX),0.5f,Random.Range(gameBoardMinZ,gameBoardMaxZ)), Quaternion.identity);
+			Instantiate (redBlock, new Vector3(Random.Range(gameBoardMinX,gameBoardMaxX),blockSpawnHeight,Random.Range(gameBoardMinZ,gameBoardMaxZ)), Quaternion.identity);
 		}
 		for(int k=0; k < Random.Range(1 + blues, (blues * 2)+1);k++){
-			Instantiate (blueBlock, new Vector3(Random.Range(gameBoardMinX,gameBoardMaxX),0.5f,Random.Range(gameBoardMinZ,gameBoardMaxZ)), Quaternion.identity);
+			Instantiate (blueBlock, new Vector3(Random.Range(gameBoardMinX,gameBoardMaxX),blockSpawnHeight,Random.Range(gameBoardMinZ,gameBoardMaxZ)), Quaternion.identity);
 		}
 		for(int m=0; m < Random.Range(1 + yellows, (yellows * 2)+1);m++){
-			Instantiate (yellowBlock, new Vector3(Random.Range(gameBoardMinX,gameBoardMaxX),0.5f,Random.Range(gameBoardMinZ,gameBoardMaxZ)), Quaternion.identity);
+			Instantiate (yellowBlock, new Vector3(Random.Range(gameBoardMinX,gameBoardMaxX),blockSpawnHeight,Random.Range(gameBoardMinZ,gameBoardMaxZ)), Quaternion.identity);
 		}
 	}
 
@@ -156,7 +177,10 @@ public class GameController : MonoBehaviour {
 		}
 		print ("Bullseyes: " + bullseyes);
 		if(bullseyes == difficulty){
-			isGameWon = true;
+			//Player can now pick up radio to call helicopter
+			audioSource.clip = bullseyeSound;
+			audioSource.Play ();
+			radio.gameObject.SetActive (true);
 		}
 	}
 
@@ -183,8 +207,8 @@ public class GameController : MonoBehaviour {
 
 		}else{
 			WinText.gameObject.SetActive (false);
-			bullseyeText.text = "Bullseyes: " + bullseyes;
-			nearMissText.text = "So Close: " + nearMisses;
+			bullseyeText.text = "BULLSEYES: " + bullseyes;
+			nearMissText.text = "NICE TRY: " + nearMisses;
 		}
 
 	}
@@ -225,15 +249,41 @@ public class GameController : MonoBehaviour {
 		initializeGame ();
 	}
 
-	void setPlayerPosition(){
-		GameObject player = GameObject.Find ("Player");
-		if(player != null){
-			player.transform.position = playerSpawn.transform.position;
-		}
+	void SetPlayerPosition(){
+		//GameObject player = GameObject.Find ("Player");
+		player.transform.position = playerSpawn.transform.position;
 	}
 
-	public void playerDied(){
+	void SetZombiePosition(){
+		zombieGroupController.ResetZombieGroup ();
+	}
+
+	public void playerDied(float speed){
+		StartCoroutine ("FadeSequence",speed);
+	}
+
+	public void GameIsWon(){
+		isGameWon = true;
+		updateUI ();
+		StartCoroutine("LoadNextLevel");
+	}
+
+	IEnumerator LoadNextLevel(){
+		//Wait x=waitTime seconds and then fade out to next level
+		float waitTime = 5f;
+		yield return new WaitForSeconds (waitTime);
+		float fadeTime = GameObject.Find ("Fading").GetComponent<Fading> ().BeginFade (1,2f);
+		yield return new WaitForSeconds (fadeTime);
+		SceneManager.LoadScene("start_screen");
+	}
+
+	IEnumerator FadeSequence(float speed){
+		float waitTime = 1f;
+		float fadeTime = GameObject.Find ("Fading").GetComponent<Fading> ().BeginFade (1,speed);
+		yield return new WaitForSeconds (fadeTime);
 		resetGame ();
 		initializeGame ();
+		yield return new WaitForSeconds (waitTime);
+		GameObject.Find ("Fading").GetComponent<Fading> ().BeginFade (-1,speed);
 	}
 }//end of class

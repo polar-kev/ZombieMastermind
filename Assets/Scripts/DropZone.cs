@@ -8,6 +8,8 @@ public class DropZone : MonoBehaviour {
 	public static int dropZoneID = 0;
 
 	public int dropzone;
+	public float dropzoneHeight = -1.9f;
+	public AudioClip dropzoneEnterSound;
 
 	private bool triggered;
 	private blockColour blockType;
@@ -16,6 +18,7 @@ public class DropZone : MonoBehaviour {
 	private float spacing = 3f;
 	private float numberOfDropzones;
 	private GameObject scoringPlatform;
+	private AudioSource audioSource;
 
 
 	// Use this for initialization
@@ -24,12 +27,13 @@ public class DropZone : MonoBehaviour {
 		//findDropzoneNumber ();
 		dropzone = dropZoneID;
 
+		audioSource = gameObject.GetComponent<AudioSource> ();
 
 		///////////////////////////////////////////////////
 		//Position dropzone platforms on scoring platform//
 		///////////////////////////////////////////////////
 		scoringPlatform = GameObject.Find ("ScoringPlatform").gameObject;
-		gameObject.transform.parent = scoringPlatform.transform;
+		//gameObject.transform.parent = scoringPlatform.transform;
 		numberOfDropzones = GameController.difficulty;
 
 		//Calculate how much space is need to place all dropzones with appropriate spacing
@@ -37,8 +41,9 @@ public class DropZone : MonoBehaviour {
 
 		//Calculate the x and z values of the dropzones with respect to the center of the scoring platform
 		float x = (scoringPlatform.GetComponent<BoxCollider> ().center.x - scoringZoneLength / 2f) + (dropzoneLength + spacing) * dropZoneID;
-		float z = dropzoneLength / 2f + scoringPlatform.GetComponent<BoxCollider> ().center.z;
-		gameObject.transform.position = new Vector3(x,gameObject.transform.position.y,z);
+		float y = dropzoneHeight;
+		float z = scoringPlatform.transform.position.z;//dropzoneLength / 2f + scoringPlatform.GetComponent<BoxCollider> ().center.z;
+		gameObject.transform.position = new Vector3(x,y,z);
 
 		//gameObject.transform.position = new Vector3(6f * dropzone,gameObject.transform.position.y,gameObject.transform.position.z);
 		print ("DropZone: " + dropzone);
@@ -57,18 +62,24 @@ public class DropZone : MonoBehaviour {
 			blockType = blockColour.red;
 			triggered = true;
 			GameController.instance.DropZoneActivated (dropzone, blockType);
+			PlayDropzoneEnterSound ();
+			audioSource.clip = dropzoneEnterSound;
+			audioSource.Play ();
+
 		}
 		if(!triggered && other.gameObject.CompareTag("BlueBlock")){
 			print ("Blue Block Entered Platform");
 			blockType = blockColour.blue;
 			triggered = true;
 			GameController.instance.DropZoneActivated (dropzone, blockType);
+			PlayDropzoneEnterSound ();
 		}
 		if(!triggered && other.gameObject.CompareTag("YellowBlock")){
 			print ("Yellow Block Entered Platform");
 			blockType = blockColour.yellow;
 			triggered = true;
 			GameController.instance.DropZoneActivated (dropzone, blockType);
+			PlayDropzoneEnterSound ();
 		}
 	}
 
@@ -91,26 +102,13 @@ public class DropZone : MonoBehaviour {
 
 	}
 
-	/*void findDropzoneNumber(){
-		if(gameObject.CompareTag("DropZone1")){
-			dropzone = 0;
-		}
-		else if(gameObject.CompareTag("DropZone2")){
-			dropzone = 1;
-		}
-		else if(gameObject.CompareTag("DropZone3")){
-			dropzone = 2;
-		}
-		else if(gameObject.CompareTag("DropZone4")){
-			dropzone = 3;
-		} else{
-			dropzone = -1;
-		}
-		print ("DropZone: " + dropzone);
-	}*/
-
 	public static void resetDropZoneID(){
 		dropZoneID = 0;
 		print ("DropZone ID Reset to: " + dropZoneID);
+	}
+
+	void PlayDropzoneEnterSound(){
+		audioSource.clip = dropzoneEnterSound;
+		audioSource.Play ();
 	}
 }//end of class
