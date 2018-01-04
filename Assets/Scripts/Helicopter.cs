@@ -6,10 +6,12 @@ public class Helicopter : MonoBehaviour {
 
 	public float speed = 50f;
 	public float rotationSpeed = 0.5f;
-	public Transform target;
-	public Transform finalDestination;
 	public float delay = 5f;
 
+	public Transform target;
+	public Transform finalDestination;
+
+	private Vector3 initialPosition;
 	private float elapsedTime;
 	private Rigidbody rgbd;
 	private GameController gameController;
@@ -23,6 +25,8 @@ public class Helicopter : MonoBehaviour {
 		elapsedTime = Time.deltaTime;
 		heliCam = gameObject.GetComponentInChildren<Camera> ();
 		heliCam.enabled = false;
+		resetPosition ();
+
 	}
 	
 	// Update is called once per frame
@@ -73,6 +77,11 @@ public class Helicopter : MonoBehaviour {
 			//Set Main Camera to Heli Cam
 			heliCam.enabled = true;
 		}
+	}
+
+	public void resetPosition(){
+		initialPosition = new Vector3 (0, 100f, 0);
+		transform.position = initialPosition;
 	}
 
 }

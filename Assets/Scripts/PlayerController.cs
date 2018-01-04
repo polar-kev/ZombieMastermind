@@ -46,7 +46,7 @@ public class PlayerController : MonoBehaviour {
 		hasBattery = false;
 		hasRadio = false;
 		isAlive = true;
-		inventoryText.text = "Flares -"+ flareCount+"-";
+		UpdateUI ();
 	}
 	
 	// Update is called once per frame
@@ -137,6 +137,10 @@ public class PlayerController : MonoBehaviour {
 		audioSource2.clip = scream;
 		audioSource2.Play ();
 		gameController.playerDied (speed);
+
+		//reset helicopter
+		helicopter.resetPosition ();
+		helicopter.gameObject.SetActive (false);
 	}
 
 	void UpdateUI(){
@@ -147,6 +151,12 @@ public class PlayerController : MonoBehaviour {
 		if(hasRadio){
 			inventoryText.text += "\n(R)adio";
 		}
+	}
+
+	public void ResetFlareCount(){
+		flareCount = 3;
+		UpdateUI ();
+		flareReady = true;
 	}
 	/*
 	 * No longer being used

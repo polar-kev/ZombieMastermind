@@ -57,6 +57,7 @@ GameObject:
   - component: {fileID: 199859360644480976}
   - component: {fileID: 54361894026798142}
   - component: {fileID: 135525318005314464}
+  - component: {fileID: 114273709474149678}
   m_Layer: 0
   m_Name: Flare
   m_TagString: flare
@@ -120,6 +121,17 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 122
   m_CollisionDetection: 0
+--- !u!114 &114273709474149678
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1480811817562742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e7f31408a0b643fcba8a714bb57a41d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!135 &135525318005314464
 SphereCollider:
   m_ObjectHideFlags: 1

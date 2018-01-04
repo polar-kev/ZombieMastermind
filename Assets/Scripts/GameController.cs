@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour {
 	//public enum blockColour{red,blue,yellow,noColour};
-	public static int difficulty = 1;
+	public static int difficulty = 3;
 	public blockColour[] mysterySequence; 
 	public blockColour[] tempArray; 
 	public GameObject redBlock;
@@ -18,7 +18,6 @@ public class GameController : MonoBehaviour {
 	public Transform playerSpawn;
 	public Radio radio;
 	public Battery battery;
-
 
 	public static GameController instance;
 	public bool isGameWon;
@@ -97,6 +96,9 @@ public class GameController : MonoBehaviour {
 		player = GameObject.FindGameObjectWithTag ("Player");
 		SetPlayerPosition ();
 		player.GetComponent<PlayerController> ().isAlive = true;
+		player.GetComponent<PlayerController> ().ResetFlareCount ();
+
+		//Initialize Zombies
 		SetZombiePosition ();
 
 		//game starts with a mystery sequence that the player must guess
@@ -208,7 +210,7 @@ public class GameController : MonoBehaviour {
 		}else{
 			WinText.gameObject.SetActive (false);
 			bullseyeText.text = "BULLSEYES: " + bullseyes;
-			nearMissText.text = "NICE TRY: " + nearMisses;
+			//nearMissText.text = "NICE TRY: " + nearMisses;
 		}
 
 	}
@@ -229,6 +231,7 @@ public class GameController : MonoBehaviour {
 	void resetGame(){
 		DropZone[] dropZones = GameObject.FindObjectsOfType<DropZone>();
 		Pickup[] blocksList = GameObject.FindObjectsOfType<Pickup> ();
+		PlayerFlare[] playerFlareList = GameObject.FindObjectsOfType<PlayerFlare> ();
 
 		//Destroy all Dropzones
 		foreach(DropZone dz in dropZones){
@@ -237,6 +240,10 @@ public class GameController : MonoBehaviour {
 		//Destroy all blocks
 		foreach(Pickup block in blocksList){
 			Destroy (block.gameObject);
+		}
+		//Destroy all flares
+		foreach(PlayerFlare pf in playerFlareList){
+			Destroy (pf.gameObject);
 		}
 			
 		DropZone.resetDropZoneID();
